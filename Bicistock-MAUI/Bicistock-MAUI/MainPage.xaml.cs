@@ -1,24 +1,27 @@
-﻿namespace Bicistock_MAUI;
+﻿using Bicistock_MAUI.Bicistock_MAUI.Shared.Models;
+using Bicistock_MAUI.Bicistock_MAUI.Shared.Services;
+using System.ComponentModel;
 
+namespace Bicistock_MAUI;
+
+[DesignTimeVisible(false)]
 public partial class MainPage : ContentPage
 {
-	int count = 0;
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    public MainPage()
+    {
+        InitializeComponent();
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+        // Aquí asignas la lista de citas al ItemSource del CollectionView
+        LoadAppointments();
+    }
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+    private async void LoadAppointments()
+    {
+        AppointmentService appointmentService = new AppointmentService();
+        List<Appointment> appointments = await appointmentService.GetHttpAppointments();
+        Vista.ItemsSource = appointments;
+    }
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
 }
 
